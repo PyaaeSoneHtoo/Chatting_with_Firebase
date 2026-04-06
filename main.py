@@ -35,40 +35,117 @@ class LoginWindow(QWidget):
         self.init_ui()
 
     def init_ui(self):
+        # Main layout with background
+        self.setStyleSheet("background-color: #f1f2f6;")
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.title_label = QLabel("Welcome to Firebase Chat")
-        self.title_label.setFont(QFont("Arial", 16, QFont.Weight.Bold))
-        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # Login Card Container
+        card = QWidget()
+        card.setMinimumWidth(350)
+        card.setMaximumWidth(400)
+        card.setStyleSheet("""
+            QWidget {
+                background-color: white;
+                border-radius: 15px;
+            }
+        """)
+        # We need a slight shadow effect normally, but pure CSS shadow in Qt is limited
+        # We will use clean borders instead
+        
+        card_layout = QVBoxLayout(card)
+        card_layout.setContentsMargins(30, 40, 30, 40)
+        card_layout.setSpacing(15)
+
+        # Icon/Title
+        title_label = QLabel("Welcome Back")
+        title_label.setFont(QFont("Segoe UI", 22, QFont.Weight.Bold))
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title_label.setStyleSheet("color: #2f3640; margin-bottom: 10px;")
+        
+        subtitle_label = QLabel("Sign in to continue to Chat")
+        subtitle_label.setFont(QFont("Segoe UI", 10))
+        subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        subtitle_label.setStyleSheet("color: #7f8fa6; margin-bottom: 20px;")
         
         self.email_input = QLineEdit()
-        self.email_input.setPlaceholderText("Email")
-        self.email_input.setMinimumWidth(250)
-        self.email_input.setStyleSheet("padding: 5px;")
+        self.email_input.setPlaceholderText("Email Address")
+        self.email_input.setFont(QFont("Segoe UI", 11))
+        self.email_input.setStyleSheet("""
+            QLineEdit {
+                padding: 12px;
+                background-color: #f5f6fa;
+                border: 1px solid #dcdde1;
+                border-radius: 8px;
+                color: #2f3640;
+            }
+            QLineEdit:focus {
+                border: 1px solid #4a69bd;
+                background-color: white;
+            }
+        """)
 
         self.password_input = QLineEdit()
         self.password_input.setPlaceholderText("Password")
         self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
-        self.password_input.setMinimumWidth(250)
-        self.password_input.setStyleSheet("padding: 5px;")
+        self.password_input.setFont(QFont("Segoe UI", 11))
+        self.password_input.setStyleSheet("""
+            QLineEdit {
+                padding: 12px;
+                background-color: #f5f6fa;
+                border: 1px solid #dcdde1;
+                border-radius: 8px;
+                color: #2f3640;
+            }
+            QLineEdit:focus {
+                border: 1px solid #4a69bd;
+                background-color: white;
+            }
+        """)
 
         self.login_btn = QPushButton("Login")
-        self.login_btn.setStyleSheet("background-color: #3498db; color: white; padding: 8px; font-weight: bold; border-radius: 4px;")
+        self.login_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.login_btn.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
+        self.login_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #4a69bd; 
+                color: white; 
+                padding: 12px; 
+                border-radius: 8px;
+                border: none;
+                margin-top: 10px;
+            }
+            QPushButton:hover {
+                background-color: #3c5399;
+            }
+        """)
         self.login_btn.clicked.connect(self.handle_login)
 
-        self.register_btn = QPushButton("Create Account")
-        self.register_btn.setStyleSheet("background-color: #2ecc71; color: white; padding: 8px; font-weight: bold; border-radius: 4px;")
+        self.register_btn = QPushButton("Create an Account")
+        self.register_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.register_btn.setFont(QFont("Segoe UI", 10))
+        self.register_btn.setStyleSheet("""
+            QPushButton {
+                background-color: transparent; 
+                color: #4a69bd; 
+                padding: 5px; 
+                border: none;
+                text-decoration: underline;
+            }
+            QPushButton:hover {
+                color: #0c2461;
+            }
+        """)
         self.register_btn.clicked.connect(self.handle_register)
 
-        layout.addWidget(self.title_label)
-        layout.addSpacing(20)
-        layout.addWidget(self.email_input)
-        layout.addWidget(self.password_input)
-        layout.addSpacing(10)
-        layout.addWidget(self.login_btn)
-        layout.addWidget(self.register_btn)
+        card_layout.addWidget(title_label)
+        card_layout.addWidget(subtitle_label)
+        card_layout.addWidget(self.email_input)
+        card_layout.addWidget(self.password_input)
+        card_layout.addWidget(self.login_btn)
+        card_layout.addWidget(self.register_btn)
 
+        layout.addWidget(card)
         self.setLayout(layout)
 
     def handle_login(self):
@@ -130,53 +207,129 @@ class ChatWindow(QWidget):
         
     def init_ui(self):
         layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         
-        # Header
-        header_layout = QHBoxLayout()
+        # Header area
+        header_widget = QWidget()
+        header_widget.setStyleSheet("""
+            QWidget {
+                background-color: #4a69bd;
+                border-bottom: 2px solid #3c5399;
+            }
+        """)
+        header_layout = QHBoxLayout(header_widget)
+        header_layout.setContentsMargins(20, 15, 20, 15)
+        
         self.user_label = QLabel("Logged in as: ...")
-        self.user_label.setFont(QFont("Arial", 10, QFont.Weight.Bold))
+        self.user_label.setFont(QFont("Segoe UI", 12, QFont.Weight.Bold))
+        self.user_label.setStyleSheet("color: white;")
         
         self.logout_btn = QPushButton("Logout")
-        self.logout_btn.setStyleSheet("background-color: #e74c3c; color: white; padding: 5px; border-radius: 3px;")
+        self.logout_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.logout_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #e55039; 
+                color: white; 
+                padding: 6px 15px; 
+                border-radius: 15px;
+                font-weight: bold;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #eb2f06;
+            }
+        """)
         self.logout_btn.clicked.connect(self.handle_logout)
         
         header_layout.addWidget(self.user_label)
         header_layout.addStretch()
         header_layout.addWidget(self.logout_btn)
         
-        # Chat Display
+        # Chat Display area
+        chat_container = QWidget()
+        chat_container.setStyleSheet("background-color: #f1f2f6;")
+        chat_layout = QVBoxLayout(chat_container)
+        chat_layout.setContentsMargins(15, 15, 15, 15)
+        
         self.chat_display = QListWidget()
         self.chat_display.setStyleSheet("""
             QListWidget {
-                background-color: #f5f6fa;
-                border: 1px solid #dcdde1;
-                border-radius: 5px;
-                padding: 10px;
-                font-size: 14px;
+                background-color: transparent;
+                border: none;
+                outline: none;
             }
             QListWidget::item {
-                padding: 5px;
-                border-bottom: 1px solid #ecf0f1;
+                background-color: white;
+                color: #2f3640;
+                padding: 12px;
+                border-radius: 10px;
+                margin-bottom: 8px;
+                font-family: 'Segoe UI';
+                font-size: 14px;
+            }
+            QListWidget::item:hover {
+                background-color: #f8f9fa;
+            }
+        """)
+        chat_layout.addWidget(self.chat_display)
+        
+        # Input Area
+        input_widget = QWidget()
+        input_widget.setStyleSheet("""
+            QWidget {
+                background-color: white;
+                border-top: 1px solid #dcdde1;
+            }
+        """)
+        input_layout = QHBoxLayout(input_widget)
+        input_layout.setContentsMargins(20, 15, 20, 15)
+        input_layout.setSpacing(10)
+        
+        self.msg_input = QLineEdit()
+        self.msg_input.setPlaceholderText("Type a message...")
+        self.msg_input.setFont(QFont("Segoe UI", 13))
+        self.msg_input.returnPressed.connect(self.send_message)
+        self.msg_input.setStyleSheet("""
+            QLineEdit {
+                padding: 12px 15px; 
+                background-color: #f1f2f6;
+                border: 1px solid #dcdde1; 
+                border-radius: 20px;
+                color: #2f3640;
+            }
+            QLineEdit:focus {
+                border: 1px solid #4a69bd;
+                background-color: #ffffff;
             }
         """)
         
-        # Input Area
-        input_layout = QHBoxLayout()
-        self.msg_input = QLineEdit()
-        self.msg_input.setPlaceholderText("Type a message...")
-        self.msg_input.returnPressed.connect(self.send_message)
-        self.msg_input.setStyleSheet("padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px;")
-        
         self.send_btn = QPushButton("Send")
-        self.send_btn.setStyleSheet("background-color: #2ecc71; color: white; padding: 8px 15px; font-weight: bold; border-radius: 4px;")
+        self.send_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.send_btn.setFont(QFont("Segoe UI", 11, QFont.Weight.Bold))
+        self.send_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #4a69bd; 
+                color: white; 
+                padding: 12px 25px; 
+                border-radius: 20px;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #3c5399;
+            }
+            QPushButton:pressed {
+                background-color: #0c2461;
+            }
+        """)
         self.send_btn.clicked.connect(self.send_message)
         
         input_layout.addWidget(self.msg_input)
         input_layout.addWidget(self.send_btn)
         
-        layout.addLayout(header_layout)
-        layout.addWidget(self.chat_display)
-        layout.addLayout(input_layout)
+        layout.addWidget(header_widget)
+        layout.addWidget(chat_container, stretch=1)
+        layout.addWidget(input_widget)
         
         self.setLayout(layout)
 
